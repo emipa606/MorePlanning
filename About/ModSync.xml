@@ -2,7 +2,7 @@
 <ModSyncNinjaData>
   <ID>ea5ef569-c263-497c-b474-e6ca46d58b57</ID>
   <ModName>More Planning (Continued)</ModName>
-  <Version>1.6.1</Version>
+  <Version>1.6.2</Version>
   <SaveBreaking>False</SaveBreaking>
   <Host name="Github">
     <Owner>emipa606</Owner>
@@ -12,8 +12,4 @@
     <Branch>master</Branch>
   </Host>
 </ModSyncNinjaData>
-
-
-
-
 

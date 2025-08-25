@@ -71,20 +71,28 @@ internal static class HarmonyPatches
     {
         var fld = typeof(MainTabWindow_MintArchitect).GetField("desPanelsCached",
             BindingFlags.Instance | BindingFlags.NonPublic);
-        var getInstance = typeof(MorePlanningMod).GetProperty("Instance")?.GetMethod;
-        var addDesignators = typeof(MorePlanningMod).GetMethod("AddDesignators");
-        foreach (var instr in instrs)
+        var addDesignators = typeof(MorePlanningMod).GetMethod(nameof(MorePlanningMod.AddDesignators),
+            BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+
+        var codes = new List<CodeInstruction>(instrs);
+        if (fld == null || addDesignators == null)
         {
-            var rightFields = instr.opcode == OpCodes.Stfld && instr.operand is FieldInfo fieldInfo && fieldInfo == fld;
-            yield return instr;
-            if (!rightFields)
+            return codes;
+        }
+
+        // Insert after the final assignment to desPanelsCached
+        for (var i = codes.Count - 1; i >= 0; i--)
+        {
+            if (codes[i].opcode != OpCodes.Stfld || codes[i].operand is not FieldInfo fi || fi != fld)
             {
                 continue;
             }
 
-            yield return new CodeInstruction(OpCodes.Call, getInstance);
-            yield return new CodeInstruction(OpCodes.Call, addDesignators);
+            codes.Insert(i + 1, new CodeInstruction(OpCodes.Call, addDesignators));
+            break;
         }
+
+        return codes;
     }
 
     public static void DoPlaySettingsGlobalControls_Postfix(WidgetRow row, bool worldView)

@@ -1,4 +1,4 @@
-# [More Planning (Continued)]()
+# [More Planning (Continued)](https://steamcommunity.com/sharedfiles/filedetails/?id=3554743746)
 
 ![Image](https://i.imgur.com/buuPQel.png)
 
@@ -7,19 +7,6 @@ Update of Alan Dariva, Usagireis mod https://steamcommunity.com/sharedfiles/file
 ![Image](https://i.imgur.com/pufA0kM.png)
 	
 ![Image](https://i.imgur.com/Z4GOv8H.png)
-
-For 1.3 ~ 1.5
-
-1.1 / 1.2 Version: https://steamcommunity.com/sharedfiles/filedetails/?id=881100382
-
-
-
-- **WILL NOT WORK ON 1.1/1.2**
-- **UNSUBSCRIBE FROM THE 1.1/1.2 VERSION IF RUNNING ON 1.3+**
-
-
-
----
 
         This mod creates a new option in the "Architect" menu, called "Planning", with more options for planning.
 
@@ -44,10 +31,12 @@ For 1.3 ~ 1.5
 
 -  See if the error persists if you just have this mod and its requirements active.
 -  If not, try adding your other mods until it happens again.
--  Post your error-log using the [Log Uploader](https://steamcommunity.com/sharedfiles/filedetails/?id=2873415404) and command Ctrl+F12
+-  Post your error-log using the [Log Uploader](https://steamcommunity.com/sharedfiles/filedetails/?id=2873415404) or the standalone [Uploader](https://steamcommunity.com/sharedfiles/filedetails/?id=2873415404) and command Ctrl+F12
 -  For best support, please use the Discord-channel for error-reporting.
 -  Do not report errors by making a discussion-thread, I get no notification of that.
 -  If you have the solution for a problem, please post it to the GitHub repository.
 -  Use [RimSort](https://github.com/RimSort/RimSort/releases/latest) to sort your mods
 
+ 
 
+[![Image](https://img.shields.io/github/v/release/emipa606/MorePlanning?label=latest%20version&style=plastic&color=9f1111&labelColor=black)](https://steamcommunity.com/sharedfiles/filedetails/changelog/3554743746) | tags:  planning options
