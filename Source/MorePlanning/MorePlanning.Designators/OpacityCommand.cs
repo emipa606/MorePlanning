@@ -21,7 +21,7 @@ public class OpacityCommand : BaseCommand
 
     public override void SelectedUpdate()
     {
-        UpdateLabel(MorePlanningMod.Instance.ModSettings.DefaultPlanOpacity);
+        UpdateLabel(MorePlanningMod.Instance.Settings.DefaultPlanOpacity);
     }
 
     protected override void OnClick()
@@ -31,7 +31,7 @@ public class OpacityCommand : BaseCommand
         foreach (var num in opacityOptions)
         {
             var text = $"{num}%";
-            if (num == MorePlanningMod.Instance.ModSettings.DefaultPlanOpacity)
+            if (num == MorePlanningMod.Instance.Settings.DefaultPlanOpacity)
             {
                 text += " " + "MorePlanning.DefaultOpacity".Translate();
             }
@@ -39,7 +39,7 @@ public class OpacityCommand : BaseCommand
             var value1 = num;
             list.Add(new FloatMenuOption(text, delegate
             {
-                MorePlanningMod.Instance.ModSettings.PlanOpacity = value1;
+                MorePlanningMod.Instance.Settings.PlanOpacity = value1;
                 UpdateLabel(value1);
             }));
         }

@@ -1,91 +1,113 @@
-using HugsLib.Settings;
 using MorePlanning.Utility;
 using Multiplayer.API;
+using System.Collections.Generic;
 using UnityEngine;
+using Verse;
 using Resources = MorePlanning.Common.Resources;
 
-namespace MorePlanning.Plan;
-
-public class PlanColorManager
+namespace MorePlanning.Plan
 {
-    public const int NumPlans = 10;
-
-    private static readonly Color[] PlanColor = new Color[10];
-
-    private static readonly bool[] PlanColorChanged = new bool[10];
-
-    private static readonly SettingHandle<string>[] _planColorSetting = new SettingHandle<string>[10];
-
-    public static readonly string[] DefaultColors =
-    [
-        "a9a9a9", "2095f2", "4bae4f", "f34235", "feea3a", "ff00f0", "00fffc", "8400ff", "ffa200", "000000"
-    ];
-
-    private static readonly int color = Shader.PropertyToID("_Color");
-
-    private static string GetDefaultColor(int i)
+    public static class PlanColorManager
     {
-        return DefaultColors[i];
-    }
+        public const int NumPlans = 10;
 
-    public static void Load(ModSettingsPack settings)
-    {
-        for (var i = 0; i < 10; i++)
+        private static readonly Color[] PlanColor = new Color[NumPlans];
+        private static readonly bool[] PlanColorChanged = new bool[NumPlans];
+
+        public static readonly string[] DefaultColors =
+        [
+            "a9a9a9", "2095f2", "4bae4f", "f34235", "feea3a",
+            "ff00f0", "00fffc", "8400ff", "ffa200", "000000"
+        ];
+
+        private static readonly int ColorShaderId = Shader.PropertyToID("_Color");
+
+        private static MorePlanningModSettings Settings =>
+            MorePlanningMod.Instance.Settings;
+
+
+        /* --------------------------------------------------------------
+         *  INITIALIZATION
+         * -------------------------------------------------------------- */
+
+        /// <summary>
+        /// Called after settings load (PostLoadInit) or after reset.
+        /// Ensures colors are valid and pushes them into materials.
+        /// </summary>
+        public static void LoadFromSettings()
         {
-            _planColorSetting[i] =
-                settings.GetHandle($"planColor{i}", $"planColor{i}", $"planColor{i}", GetDefaultColor(i));
-            _planColorSetting[i].NeverVisible = true;
+            // Ensure list exists and contains correct number of entries
+            if (Settings.PlanColors == null || Settings.PlanColors.Count != NumPlans)
+            {
+                Settings.PlanColors = new List<string>(NumPlans);
+                for (int i = 0; i < NumPlans; i++)
+                    Settings.PlanColors.Add(DefaultColors[i]);
+            }
+
+            // Initialize all cached colors/materials
+            for (int i = 0; i < NumPlans; i++)
+                OnColorChanged(i);
         }
 
-        for (var j = 0; j < 10; j++)
+
+        /* --------------------------------------------------------------
+         *  SYNCED COLOR CHANGE (Multiplayer)
+         * -------------------------------------------------------------- */
+
+        [SyncMethod]
+        public static void ChangeColor(int colorNum, string hexColor)
         {
-            OnColorChanged(j);
-        }
-    }
+            Settings.PlanColors[colorNum] = hexColor;
 
-    [SyncMethod]
-    public static void ChangeColor(int colorNum, string hexColor)
-    {
-        _planColorSetting[colorNum].Value = hexColor;
-        OnColorChanged(colorNum);
-    }
+            OnColorChanged(colorNum);
 
-    private static void OnColorChanged(int numColor = -1)
-    {
-        PlanColor[numColor] = _planColorSetting[numColor].Value.HexToColor();
-        PlanColorChanged[numColor] = true;
-    }
-
-    public static void InvalidateColors()
-    {
-        for (var i = 0; i < PlanColorChanged.Length; i++)
-        {
-            PlanColorChanged[i] = true;
-        }
-    }
-
-    public static Color GetColor(int col = -1)
-    {
-        if (col < 0)
-        {
-            col = MorePlanningMod.Instance.SelectedColor;
+            // Ensure RimWorld marks settings as modified
+            MorePlanningMod.Instance.WriteSettings();
         }
 
-        return PlanColor[col];
-    }
 
-    public static Material GetMaterial(int numColor)
-    {
-        if (!PlanColorChanged[numColor])
+        /* --------------------------------------------------------------
+         *  INTERNAL COLOR MATERIAL UPDATE
+         * -------------------------------------------------------------- */
+
+        private static void OnColorChanged(int numColor)
         {
-            return Resources.PlanMatColor[numColor];
+            string hex = Settings.PlanColors[numColor];
+            PlanColor[numColor] = hex.HexToColor();
+            PlanColorChanged[numColor] = true;
         }
 
-        PlanColorChanged[numColor] = false;
-        var value = PlanColor[numColor];
-        value.a = MorePlanningMod.Instance.ModSettings.PlanOpacity / 100f;
-        Resources.PlanMatColor[numColor].SetColor(color, value);
+        public static void InvalidateColors()
+        {
+            for (int i = 0; i < NumPlans; i++)
+                PlanColorChanged[i] = true;
+        }
 
-        return Resources.PlanMatColor[numColor];
+
+        /* --------------------------------------------------------------
+         *  PUBLIC GETTERS
+         * -------------------------------------------------------------- */
+
+        public static Color GetColor(int col = -1)
+        {
+            if (col < 0)
+                col = MorePlanningMod.Instance.SelectedColor;
+
+            return PlanColor[col];
+        }
+
+        public static Material GetMaterial(int colorIndex)
+        {
+            if (!PlanColorChanged[colorIndex])
+                return Resources.PlanMatColor[colorIndex];
+
+            PlanColorChanged[colorIndex] = false;
+
+            Color c = PlanColor[colorIndex];
+            c.a = Settings.PlanOpacity / 100f;
+
+            Resources.PlanMatColor[colorIndex].SetColor(ColorShaderId, c);
+            return Resources.PlanMatColor[colorIndex];
+        }
     }
 }
