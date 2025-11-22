@@ -9,44 +9,10 @@ namespace MorePlanning.Designators;
 
 public class RemoveDesignator : PlanBaseDesignator
 {
-    public RemoveDesignator()
-        : base("DesignatorPlanRemove".Translate(), "DesignatorPlanRemoveDesc".Translate())
+    public RemoveDesignator() : base("DesignatorPlanRemove".Translate(), "DesignatorPlanRemoveDesc".Translate())
     {
         soundSucceeded = SoundDefOf.Designate_PlanRemove;
         hotKey = KeyBindingDefOf.Designator_Deconstruct;
-    }
-
-    public override AcceptanceReport CanDesignateCell(IntVec3 c)
-    {
-        if (!c.InBounds(Map))
-        {
-            return false;
-        }
-
-        return MorePlanningMod.Instance.OverrideColors
-            ? MapUtility.HasAnyPlanDesignationAt(c, Map)
-            : MapUtility.HasPlanDesignationAt(c, Map, MorePlanningMod.Instance.SelectedColor);
-    }
-
-    public override void DesignateSingleCell(IntVec3 c)
-    {
-        MapUtility.RemoveAllPlanDesignationAt(c, Map);
-    }
-
-    public override void DrawMouseAttachments()
-    {
-        var mousePosition = Event.current.mousePosition;
-        var y = mousePosition.y + 12f;
-        if (MorePlanningMod.Instance.OverrideColors)
-        {
-            Widgets.DrawTextureFitted(new Rect(mousePosition.x + 12f, y, 32f, 32f), Resources.PlanToolRemoveAll,
-                iconDrawScale);
-            return;
-        }
-
-        Graphics.DrawTexture(new Rect(mousePosition.x + 12f, y, 32f, 32f), Resources.Plan, iconTexCoords, 0, 1, 0, 1,
-            PlanColorManager.GetColor());
-        Widgets.DrawTextureFitted(new Rect(mousePosition.x + 12f, y, 32f, 32f), Resources.RemoveIcon, iconDrawScale);
     }
 
     protected override void DrawToolbarIcon(Rect rect)
@@ -66,7 +32,50 @@ public class RemoveDesignator : PlanBaseDesignator
         }
 
         Graphics.DrawTexture(screenRect, Resources.Plan, iconTexCoords, 0, 1, 0, 1, PlanColorManager.GetColor());
-        Widgets.DrawTextureFitted(new Rect(rect), Resources.RemoveIcon, iconDrawScale * 0.85f, iconProportions,
+        Widgets.DrawTextureFitted(
+            new Rect(rect),
+            Resources.RemoveIcon,
+            iconDrawScale * 0.85f,
+            iconProportions,
             iconTexCoords);
+    }
+
+    public override AcceptanceReport CanDesignateCell(IntVec3 c)
+    {
+        if (!c.InBounds(Map))
+        {
+            return false;
+        }
+
+        return MorePlanningMod.Instance.OverrideColors
+            ? MapUtility.HasAnyPlanDesignationAt(c, Map)
+            : MapUtility.HasPlanDesignationAt(c, Map, MorePlanningMod.Instance.SelectedColor);
+    }
+
+    public override void DesignateSingleCell(IntVec3 c) { MapUtility.RemoveAllPlanDesignationAt(c, Map); }
+
+    public override void DrawMouseAttachments()
+    {
+        var mousePosition = Event.current.mousePosition;
+        var y = mousePosition.y + 12f;
+        if (MorePlanningMod.Instance.OverrideColors)
+        {
+            Widgets.DrawTextureFitted(
+                new Rect(mousePosition.x + 12f, y, 32f, 32f),
+                Resources.PlanToolRemoveAll,
+                iconDrawScale);
+            return;
+        }
+
+        Graphics.DrawTexture(
+            new Rect(mousePosition.x + 12f, y, 32f, 32f),
+            Resources.Plan,
+            iconTexCoords,
+            0,
+            1,
+            0,
+            1,
+            PlanColorManager.GetColor());
+        Widgets.DrawTextureFitted(new Rect(mousePosition.x + 12f, y, 32f, 32f), Resources.RemoveIcon, iconDrawScale);
     }
 }

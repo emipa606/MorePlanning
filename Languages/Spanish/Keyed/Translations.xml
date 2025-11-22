@@ -31,4 +31,8 @@
   <MorePlanning.PlanExportDesc>Exportar planos al portapapeles del sistema</MorePlanning.PlanExportDesc>
   <MorePlanning.PlanExportError>Error al exportar la planificación.</MorePlanning.PlanExportError>
   <MorePlanning.PlanExportOK>Planificación exportada al portapapeles del sistema.</MorePlanning.PlanExportOK>
+  <MorePlanning_ModName>Más planificación (continuación)</MorePlanning_ModName>
+  <MorePlanning.Reset>Restablecer valores por defecto</MorePlanning.Reset>
+  <MorePlanning.CurrentModVersion>Versión del mod instalada: {0}</MorePlanning.CurrentModVersion>
+  <MorePlanning.SettingPlanOpacity.label>Opacidad del plano</MorePlanning.SettingPlanOpacity.label>
 </LanguageData>

@@ -31,4 +31,8 @@
   <MorePlanning.PlanExportDesc>Pläne in die Zwischenablage des Systems exportieren</MorePlanning.PlanExportDesc>
   <MorePlanning.PlanExportError>Fehler beim Exportieren der Planung.</MorePlanning.PlanExportError>
   <MorePlanning.PlanExportOK>Exportierte Planung in die Zwischenablage des Systems.</MorePlanning.PlanExportOK>
+  <MorePlanning_ModName>Mehr Planung (Fortsetzung)</MorePlanning_ModName>
+  <MorePlanning.Reset>Auf Standardwerte zurücksetzen</MorePlanning.Reset>
+  <MorePlanning.CurrentModVersion>Installierte Mod-Version: {0}</MorePlanning.CurrentModVersion>
+  <MorePlanning.SettingPlanOpacity.label>Plan Deckkraft</MorePlanning.SettingPlanOpacity.label>
 </LanguageData>

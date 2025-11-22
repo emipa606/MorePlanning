@@ -2,13 +2,14 @@
   "Continued": true,
   "CanAdd": "0",
   "CanRemove": "2",
-  "LastXmlCleaning": "2025-08-25T20:47:06.7619854+02:00",
+  "LastXmlCleaning": "2025-11-22T20:22:50.8228492+01:00",
   "SocialImageSet": true,
   "Patches": false,
   "Defs": true,
   "Assemblies": true,
-  "LinesOfCode": 59448,
-  "LinesOfXML": 1203,
+  "LinesOfCode": 66764,
+  "LinesOfXML": 1775,
   "SearchTags": " planning options",
-  "PreviewVersion": "1.6"
+  "PreviewVersion": "1.6",
+  "CodeBaseSize": 75
 }

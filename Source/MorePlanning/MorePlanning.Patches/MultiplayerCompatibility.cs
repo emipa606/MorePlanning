@@ -10,7 +10,7 @@ internal class MultiplayerCompatibility
 {
     static MultiplayerCompatibility()
     {
-        if (!MP.enabled)
+        if(!MP.enabled)
         {
             return;
         }
@@ -22,7 +22,7 @@ internal class MultiplayerCompatibility
 
     private static void SyncWorkerForPlanDesignation(SyncWorker sync, ref AddDesignator inst)
     {
-        if (sync.isWriting)
+        if(sync.isWriting)
         {
             sync.Write(MorePlanningMod.Instance.SelectedColor);
             return;

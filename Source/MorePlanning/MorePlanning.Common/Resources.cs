@@ -6,43 +6,42 @@ namespace MorePlanning.Common;
 [StaticConstructorOnStartup]
 internal static class Resources
 {
-    public static readonly Texture2D Plan;
-
-    public static readonly Texture2D IconOpacity;
-
-    public static readonly Texture2D IconShowPlanning;
-
-    public static readonly Texture2D IconVisible;
-
-    public static readonly Texture2D IconInvisible;
-
-    public static readonly Texture2D ToolBoxColor;
-
-    public static readonly Texture2D ToolBoxColorSelected;
-
-    public static readonly Texture2D RemoveIcon;
-
-    public static readonly Texture2D PlanToolRemoveAll;
+    public static readonly Texture2D ColorPickerOverlay;
 
     public static readonly Texture2D ColorPickerSelect;
 
-    public static readonly Texture2D ColorPickerOverlay;
-
     public static readonly Texture2D HsvSlider;
-
-    public static readonly Texture2D IconExport;
-
-    public static readonly Texture2D IconImport;
 
     public static readonly Texture2D IconCopy;
 
     public static readonly Texture2D IconCut;
 
+    public static readonly Texture2D IconExport;
+
+    public static readonly Texture2D IconImport;
+
+    public static readonly Texture2D IconInvisible;
+
+    public static readonly Texture2D IconOpacity;
+
     public static readonly Texture2D IconPaste;
+
+    public static readonly Texture2D IconShowPlanning;
+
+    public static readonly Texture2D IconVisible;
+    public static readonly Texture2D Plan;
+
+    public static DesignationDef PlanDesignationDef;
 
     public static readonly Material[] PlanMatColor;
 
-    public static DesignationDef PlanDesignationDef;
+    public static readonly Texture2D PlanToolRemoveAll;
+
+    public static readonly Texture2D RemoveIcon;
+
+    public static readonly Texture2D ToolBoxColor;
+
+    public static readonly Texture2D ToolBoxColorSelected;
 
     static Resources()
     {
@@ -64,7 +63,7 @@ internal static class Resources
         IconCut = ContentFinder<Texture2D>.Get("UI/PlanCut");
         IconPaste = ContentFinder<Texture2D>.Get("UI/PlanPaste");
         PlanMatColor = new Material[10];
-        for (var i = 0; i < PlanMatColor.Length; i++)
+        for(var i = 0; i < PlanMatColor.Length; i++)
         {
             PlanMatColor[i] = MaterialPool.MatFrom($"UI/PlanBase{i}", ShaderDatabase.MetaOverlay, Color.white);
         }

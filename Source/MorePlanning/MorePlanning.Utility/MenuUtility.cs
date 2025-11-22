@@ -8,18 +8,6 @@ internal class MenuUtility
 {
     private static FieldInfo _resolvedDesignatorsInfo;
 
-    private static void InitReflection()
-    {
-        _resolvedDesignatorsInfo =
-            typeof(DesignationCategoryDef).GetField("resolvedDesignators",
-                BindingFlags.Instance | BindingFlags.NonPublic);
-        if (_resolvedDesignatorsInfo == null)
-        {
-            MorePlanningMod.LogError(
-                "Reflection failed (MenuUtility::InitReflection, DesignationCategoryDef.resolvedDesignators)");
-        }
-    }
-
     private static List<Designator> GetPlanningDesignators()
     {
         if (_resolvedDesignatorsInfo == null)
@@ -35,6 +23,19 @@ internal class MenuUtility
 
         MorePlanningMod.LogError("Menu planning not found");
         return null;
+    }
+
+    private static void InitReflection()
+    {
+        _resolvedDesignatorsInfo =
+            typeof(DesignationCategoryDef).GetField(
+            "resolvedDesignators",
+            BindingFlags.Instance | BindingFlags.NonPublic);
+        if (_resolvedDesignatorsInfo == null)
+        {
+            MorePlanningMod.LogError(
+                "Reflection failed (MenuUtility::InitReflection, DesignationCategoryDef.resolvedDesignators)");
+        }
     }
 
     public static T GetPlanningDesignator<T>() where T : class

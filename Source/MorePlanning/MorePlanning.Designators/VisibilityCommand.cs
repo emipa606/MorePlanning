@@ -8,21 +8,10 @@ namespace MorePlanning.Designators;
 
 public class VisibilityCommand : BaseCommand
 {
-    public VisibilityCommand()
-        : base("MorePlanning.PlanVisibility".Translate(), "MorePlanning.PlanVisibilityDesc".Translate())
-    {
-        hotKey = KeyBindingDefOf.Misc12;
-    }
-
-    public void UpdateIcon(bool visible)
-    {
-        icon = visible ? Resources.IconVisible : Resources.IconInvisible;
-    }
-
-    public override void SelectedUpdate()
-    {
-        UpdateIcon(MorePlanningMod.Instance.PlanningVisibility);
-    }
+    public VisibilityCommand() : base(
+        "MorePlanning.PlanVisibility".Translate(),
+        "MorePlanning.PlanVisibilityDesc".Translate())
+    { hotKey = KeyBindingDefOf.Misc12; }
 
     public override void ProcessInput(Event ev)
     {
@@ -30,4 +19,8 @@ public class VisibilityCommand : BaseCommand
         MorePlanningMod.Instance.PlanningVisibility = !MorePlanningMod.Instance.PlanningVisibility;
         Find.DesignatorManager.Deselect();
     }
+
+    public override void SelectedUpdate() { UpdateIcon(MorePlanningMod.Instance.PlanningVisibility); }
+
+    public void UpdateIcon(bool visible) { icon = visible ? Resources.IconVisible : Resources.IconInvisible; }
 }

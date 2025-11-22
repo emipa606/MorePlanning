@@ -31,4 +31,8 @@
   <MorePlanning.PlanExportDesc>将计划导出到系统剪贴板</MorePlanning.PlanExportDesc>
   <MorePlanning.PlanExportError>导出规划时出错。</MorePlanning.PlanExportError>
   <MorePlanning.PlanExportOK>将规划导出到系统剪贴板。</MorePlanning.PlanExportOK>
+  <MorePlanning_ModName>更多规划（续）</MorePlanning_ModName>
+  <MorePlanning.Reset>重置为默认值</MorePlanning.Reset>
+  <MorePlanning.CurrentModVersion>已安装 MOD 版本：{0}</MorePlanning.CurrentModVersion>
+  <MorePlanning.SettingPlanOpacity.label>规划不透明度</MorePlanning.SettingPlanOpacity.label>
 </LanguageData>

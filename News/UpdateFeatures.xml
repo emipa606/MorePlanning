@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+	<HugsLib.UpdateFeatureDef Abstract="true" Name="MorePlanning_UpdateFeatureBase">
+		<modNameReadable>MorePlanning</modNameReadable>
+		<linkUrl>https://steamcommunity.com/sharedfiles/filedetails/?id=3554743746</linkUrl>
+	</HugsLib.UpdateFeatureDef>
+	<HugsLib.UpdateFeatureDef ParentName="MorePlanning_UpdateFeatureBase">
+		<defName>MorePlanning_1_6_2</defName>
+		<assemblyVersion>1.6.2</assemblyVersion>
+		<content>This update removes the HugsLib requirement, thanks to Zaljerem!</content>
+	</HugsLib.UpdateFeatureDef>
+</Defs>
+

@@ -1,10 +1,10 @@
+using MorePlanning.Plan;
+using MorePlanning.Utility;
+using RimWorld;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using MorePlanning.Plan;
-using MorePlanning.Utility;
-using RimWorld;
 using UnityEngine;
 using Verse;
 using Resources = MorePlanning.Common.Resources;
@@ -13,11 +13,8 @@ namespace MorePlanning.Designators;
 
 public class ImportCommand : BaseCommand
 {
-    public ImportCommand()
-        : base("MorePlanning.PlanImport".Translate(), "MorePlanning.PlanImportDesc".Translate())
-    {
-        icon = Resources.IconImport;
-    }
+    public ImportCommand() : base("MorePlanning.PlanImport".Translate(), "MorePlanning.PlanImportDesc".Translate())
+    { icon = Resources.IconImport; }
 
     protected override void OnClick()
     {
@@ -30,8 +27,7 @@ public class ImportCommand : BaseCommand
                 return;
             }
 
-            var array = systemCopyBuffer.ToLowerInvariant()
-                .Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
+            var array = systemCopyBuffer.ToLowerInvariant().Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
             Array.Reverse(array);
             var regex = new Regex("^[-a-z]+$");
             if (!array.All(regex.IsMatch))
@@ -61,11 +57,7 @@ public class ImportCommand : BaseCommand
                     }
 
                     var color = Mathf.Min(10, Mathf.Max(0, c - 97));
-                    list.Add(new PlanInfo
-                    {
-                        Pos = new IntVec3(num2, 0, num),
-                        Color = color
-                    });
+                    list.Add(new PlanInfo { Pos = new IntVec3(num2, 0, num), Color = color });
                 }
             }
 

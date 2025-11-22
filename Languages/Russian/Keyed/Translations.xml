@@ -31,4 +31,8 @@
   <MorePlanning.PlanExportDesc>Экспорт планов в системный буфер обмена</MorePlanning.PlanExportDesc>
   <MorePlanning.PlanExportError>Ошибка экспорта планирования.</MorePlanning.PlanExportError>
   <MorePlanning.PlanExportOK>Экспортировано планирование в системный буфер обмена.</MorePlanning.PlanExportOK>
+  <MorePlanning_ModName>Больше планирования (продолжение)</MorePlanning_ModName>
+  <MorePlanning.Reset>Сброс настроек по умолчанию</MorePlanning.Reset>
+  <MorePlanning.CurrentModVersion>Установленная версия мода: {0}</MorePlanning.CurrentModVersion>
+  <MorePlanning.SettingPlanOpacity.label>Непрозрачность плана</MorePlanning.SettingPlanOpacity.label>
 </LanguageData>

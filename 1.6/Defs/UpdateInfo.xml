@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+	<TabulaRasa.UpdateDef Abstract="true" Name="MorePlanning_UpdateInfoBase">
+		<linkUrl>https://steamcommunity.com/sharedfiles/filedetails/?id=3554743746</linkUrl>
+		<banner>UpdateInfo/MorePlanning</banner>
+	</TabulaRasa.UpdateDef>
+	<TabulaRasa.UpdateDef ParentName="MorePlanning_UpdateInfoBase" MayRequire="neronix17.toolbox">
+		<defName>MorePlanning_1_6_2</defName>
+		<date>2025/11/22</date>
+		<content>This update removes the HugsLib requirement, thanks to Zaljerem!</content>
+	</TabulaRasa.UpdateDef>
+</Defs>
+

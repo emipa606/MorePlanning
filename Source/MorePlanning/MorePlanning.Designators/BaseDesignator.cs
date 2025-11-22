@@ -21,7 +21,7 @@ public abstract class BaseDesignator : Designator
     {
         var material = !disabled ? null : TexUI.GrayscaleGUI;
         var badTex = icon;
-        if (badTex == null)
+        if(badTex == null)
         {
             badTex = BaseContent.BadTex;
         }
@@ -31,7 +31,13 @@ public abstract class BaseDesignator : Designator
         var x = iconOffset.x * rect2.size.x;
         var y = iconOffset.y;
         rect2.position = position + new Vector2(x, y * rect2.size.y);
-        Widgets.DrawTextureFitted(rect2, badTex, iconDrawScale * 0.85f, iconProportions, iconTexCoords, iconAngle,
+        Widgets.DrawTextureFitted(
+            rect2,
+            badTex,
+            iconDrawScale * 0.85f,
+            iconProportions,
+            iconTexCoords,
+            iconAngle,
             material);
     }
 
@@ -39,10 +45,10 @@ public abstract class BaseDesignator : Designator
     {
         Text.Font = GameFont.Tiny;
         var mouseIsOver = false;
-        if (Mouse.IsOver(rect))
+        if(Mouse.IsOver(rect))
         {
             mouseIsOver = true;
-            if (!disabled)
+            if(!disabled)
             {
                 GUI.color = GenUI.MouseoverColor;
             }
@@ -56,24 +62,24 @@ public abstract class BaseDesignator : Designator
         GUI.color = Color.white;
         var keyIsDown = false;
         var keyCode = hotKey?.MainKey ?? KeyCode.None;
-        if (keyCode != KeyCode.None && !GizmoGridDrawer.drawnHotKeys.Contains(keyCode))
+        if(keyCode != KeyCode.None && !GizmoGridDrawer.drawnHotKeys.Contains(keyCode))
         {
             Widgets.Label(new Rect(rect.x + 5f, rect.y + 5f, rect.width - 10f, 18f), keyCode.ToStringReadable());
             GizmoGridDrawer.drawnHotKeys.Add(keyCode);
-            if (hotKey is { KeyDownEvent: true })
+            if(hotKey is { KeyDownEvent: true })
             {
                 keyIsDown = true;
                 Event.current.Use();
             }
         }
 
-        if (Widgets.ButtonInvisible(rect))
+        if(Widgets.ButtonInvisible(rect))
         {
             keyIsDown = true;
         }
 
         var labelCap = LabelCap;
-        if (!labelCap.NullOrEmpty())
+        if(!labelCap.NullOrEmpty())
         {
             var num = Text.CalcHeight(labelCap, rect.width);
             var rect2 = new Rect(rect.x, rect.yMax - num + 12f, rect.width, num);
@@ -86,10 +92,10 @@ public abstract class BaseDesignator : Designator
         }
 
         GUI.color = Color.white;
-        if (DoTooltip)
+        if(DoTooltip)
         {
             TipSignal tip = Desc;
-            if (disabled && !disabledReason.NullOrEmpty())
+            if(disabled && !disabledReason.NullOrEmpty())
             {
                 var text = tip.text;
                 tip.text = $"{text}\n\n" + "DisabledCommand".Translate() + ": " + disabledReason;
@@ -98,21 +104,21 @@ public abstract class BaseDesignator : Designator
             TooltipHandler.TipRegion(rect, tip);
         }
 
-        if (!HighlightTag.NullOrEmpty() &&
+        if(!HighlightTag.NullOrEmpty() &&
             (Find.WindowStack.FloatMenu == null || !Find.WindowStack.FloatMenu.windowRect.Overlaps(rect)))
         {
             UIHighlighter.HighlightOpportunity(rect, HighlightTag);
         }
 
         Text.Font = GameFont.Small;
-        if (!keyIsDown)
+        if(!keyIsDown)
         {
             return mouseIsOver ? new GizmoResult(GizmoState.Mouseover, null) : new GizmoResult(GizmoState.Clear, null);
         }
 
-        if (disabled)
+        if(disabled)
         {
-            if (!disabledReason.NullOrEmpty())
+            if(!disabledReason.NullOrEmpty())
             {
                 Messages.Message(disabledReason, MessageTypeDefOf.RejectInput, false);
             }
@@ -121,13 +127,12 @@ public abstract class BaseDesignator : Designator
         }
 
         GizmoResult result;
-        if (Event.current.button == 1)
+        if(Event.current.button == 1)
         {
             result = new GizmoResult(GizmoState.OpenedFloatMenu, Event.current);
-        }
-        else
+        } else
         {
-            if (!TutorSystem.AllowAction(TutorTagSelect))
+            if(!TutorSystem.AllowAction(TutorTagSelect))
             {
                 return new GizmoResult(GizmoState.Mouseover, null);
             }

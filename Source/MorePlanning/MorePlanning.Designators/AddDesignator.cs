@@ -15,6 +15,11 @@ public class AddDesignator : PlanBaseDesignator
         hotKey = KeyBindingDefOf.Designator_Cancel;
     }
 
+    protected override void DrawToolbarIcon(Rect rect)
+    {
+        Graphics.DrawTexture(new Rect(rect), Resources.Plan, iconTexCoords, 0, 1, 0, 1, PlanColorManager.GetColor());
+    }
+
     public override AcceptanceReport CanDesignateCell(IntVec3 c)
     {
         if (!c.InBounds(Map))
@@ -42,10 +47,5 @@ public class AddDesignator : PlanBaseDesignator
         var mousePosition = Event.current.mousePosition;
         Graphics.DrawTexture(new Rect(y: mousePosition.y + 12f, x: mousePosition.x + 12f, width: 32f, height: 32f),
             Resources.Plan, iconTexCoords, 0, 1, 0, 1, PlanColorManager.GetColor());
-    }
-
-    protected override void DrawToolbarIcon(Rect rect)
-    {
-        Graphics.DrawTexture(new Rect(rect), Resources.Plan, iconTexCoords, 0, 1, 0, 1, PlanColorManager.GetColor());
     }
 }

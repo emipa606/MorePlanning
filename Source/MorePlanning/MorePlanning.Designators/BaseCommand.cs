@@ -11,10 +11,8 @@ public class BaseCommand : Designator
         defaultDesc = desc;
     }
 
-    public override void ProcessInput(Event ev)
+    protected virtual void OnClick()
     {
-        base.ProcessInput(ev);
-        OnClick();
     }
 
     public override AcceptanceReport CanDesignateCell(IntVec3 loc)
@@ -22,7 +20,9 @@ public class BaseCommand : Designator
         return AcceptanceReport.WasRejected;
     }
 
-    protected virtual void OnClick()
+    public override void ProcessInput(Event ev)
     {
+        base.ProcessInput(ev);
+        OnClick();
     }
 }

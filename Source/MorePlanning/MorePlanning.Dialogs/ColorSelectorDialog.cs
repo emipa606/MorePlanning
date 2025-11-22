@@ -1,6 +1,6 @@
-using System;
 using MorePlanning.Common;
 using MorePlanning.Plan;
+using System;
 using UnityEngine;
 using Verse;
 using Resources = MorePlanning.Common.Resources;
@@ -9,14 +9,14 @@ namespace MorePlanning.Dialogs;
 
 public class ColorSelectorDialog : Window
 {
+    private bool AcceptColor;
     private readonly ConvertibleColor Color;
 
     private readonly string HexColorBefore;
 
-    private readonly int NumColor;
-    private bool AcceptColor;
-
     private string InputColorHex;
+
+    private readonly int NumColor;
 
     private float S;
 
@@ -39,24 +39,11 @@ public class ColorSelectorDialog : Window
         closeOnClickedOutside = true;
     }
 
-    public override Vector2 InitialSize => new(416f, 292f);
-
-    public override void PreClose()
-    {
-        if (!AcceptColor)
-        {
-            PlanColorManager.ChangeColor(NumColor, HexColorBefore);
-        }
-    }
-
     public override void DoWindowContents(Rect inRect)
     {
         var colorRGB = Color.ColorRGB;
-        var rect = new Rect(0f, 0f, 10f, 10f)
-        {
-            center = new Vector2(256f * S, 256f - (256f * V))
-        };
-        if (GUI.RepeatButton(new Rect(0f, 0f, 256f, 256f), ""))
+        var rect = new Rect(0f, 0f, 10f, 10f) { center = new Vector2(256f * S, 256f - (256f * V)) };
+        if(GUI.RepeatButton(new Rect(0f, 0f, 256f, 256f), string.Empty))
         {
             Color.S = (Event.current.mousePosition.x - inRect.x) / 256f;
             Color.V = 1f - ((Event.current.mousePosition.y - inRect.y) / 256f);
@@ -71,32 +58,32 @@ public class ColorSelectorDialog : Window
         var text = Widgets.TextField(new Rect(305f, 91f, 76f, 23f), InputColorHex);
         var num2 = Widgets.ButtonText(new Rect(305f, 128f, 76f, 50f), "MorePlanning.DefaultColor".Translate());
         var okPressed = Widgets.ButtonText(new Rect(305f, 234f, 76f, 23f), "MorePlanning.Ok".Translate());
-        if (Math.Abs(num - Slider) > 0.01)
+        if(Math.Abs(num - Slider) > 0.01)
         {
             Color.H = num;
             Slider = num;
         }
 
         var colorChanged = false;
-        if (text != InputColorHex)
+        if(text != InputColorHex)
         {
             Color.ColorHex = $"#{text}";
             InputColorHex = text;
             colorChanged = true;
         }
 
-        if (num2)
+        if(num2)
         {
             Color.ColorHex = $"#{PlanColorManager.DefaultColors[NumColor]}";
         }
 
-        if (okPressed)
+        if(okPressed)
         {
             AcceptColor = true;
             Close();
         }
 
-        if (colorRGB.Equals(Color.ColorRGB))
+        if(colorRGB.Equals(Color.ColorRGB))
         {
             return;
         }
@@ -104,11 +91,21 @@ public class ColorSelectorDialog : Window
         Slider = Color.H;
         S = Color.S;
         V = Color.V;
-        if (!colorChanged)
+        if(!colorChanged)
         {
             InputColorHex = Color.ColorHex;
         }
 
         PlanColorManager.ChangeColor(NumColor, Color.ColorHex);
     }
+
+    public override void PreClose()
+    {
+        if(!AcceptColor)
+        {
+            PlanColorManager.ChangeColor(NumColor, HexColorBefore);
+        }
+    }
+
+    public override Vector2 InitialSize => new(416f, 292f);
 }

@@ -31,4 +31,8 @@
   <MorePlanning.PlanExportDesc>Exporter les plans dans le presse-papiers du système</MorePlanning.PlanExportDesc>
   <MorePlanning.PlanExportError>Erreur d'exportation de la planification.</MorePlanning.PlanExportError>
   <MorePlanning.PlanExportOK>Planification exportée dans le presse-papiers du système.</MorePlanning.PlanExportOK>
+  <MorePlanning_ModName>Plus de planification (suite)</MorePlanning_ModName>
+  <MorePlanning.Reset>Réinitialisation aux valeurs par défaut</MorePlanning.Reset>
+  <MorePlanning.CurrentModVersion>Version installée du mod : {0}</MorePlanning.CurrentModVersion>
+  <MorePlanning.SettingPlanOpacity.label>Opacité du plan</MorePlanning.SettingPlanOpacity.label>
 </LanguageData>

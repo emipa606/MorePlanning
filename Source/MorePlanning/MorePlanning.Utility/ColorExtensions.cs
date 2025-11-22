@@ -26,20 +26,25 @@ public static class ColorExtensions
     {
         color = Color.black;
         cstr = cstr.TrimStart(['#']);
-        if (!int.TryParse(cstr[..2], NumberStyles.AllowHexSpecifier, CultureInfo.InvariantCulture,
-                out var result))
+        if (!int.TryParse(cstr[..2], NumberStyles.AllowHexSpecifier, CultureInfo.InvariantCulture, out var result))
         {
             return false;
         }
 
-        if (!int.TryParse(cstr.Substring(2, 2), NumberStyles.AllowHexSpecifier, CultureInfo.InvariantCulture,
-                out var result2))
+        if (!int.TryParse(
+            cstr.Substring(2, 2),
+            NumberStyles.AllowHexSpecifier,
+            CultureInfo.InvariantCulture,
+            out var result2))
         {
             return false;
         }
 
-        if (!int.TryParse(cstr.Substring(4, 2), NumberStyles.AllowHexSpecifier, CultureInfo.InvariantCulture,
-                out var result3))
+        if (!int.TryParse(
+            cstr.Substring(4, 2),
+            NumberStyles.AllowHexSpecifier,
+            CultureInfo.InvariantCulture,
+            out var result3))
         {
             return false;
         }

@@ -12,15 +12,8 @@ namespace MorePlanning.Designators;
 public class CopyDesignator : BaseDesignator
 {
     // ReSharper disable once MemberCanBeProtected.Global
-    public CopyDesignator()
-        : base("MorePlanning.PlanCopy".Translate(), "MorePlanning.PlanCopyDesc".Translate())
-    {
-        icon = Resources.IconCopy;
-    }
-
-    public override DrawStyleCategoryDef DrawStyleCategory => DrawStyleCategoryDefOf.Plans;
-
-    public override bool DragDrawMeasurements => true;
+    public CopyDesignator() : base("MorePlanning.PlanCopy".Translate(), "MorePlanning.PlanCopyDesc".Translate())
+    { icon = Resources.IconCopy; }
 
     public override AcceptanceReport CanDesignateCell(IntVec3 c)
     {
@@ -37,18 +30,13 @@ public class CopyDesignator : BaseDesignator
         return MapUtility.HasAnyPlanDesignationAt(c, Map);
     }
 
-    public override void RenderHighlight(List<IntVec3> dragCells)
-    {
-        DesignatorUtility.RenderHighlightOverSelectableCells(this, dragCells);
-    }
-
     public override void DesignateMultiCell(IEnumerable<IntVec3> cells)
     {
         var list = (from cell in cells
-            select MapUtility.GetPlanDesignationAt(cell, Map)
+                    select MapUtility.GetPlanDesignationAt(cell, Map)
             into designation
-            where designation != null
-            select designation).ToList();
+                    where designation != null
+                    select designation).ToList();
         cells = list.Select(plan => plan.target.Cell);
         if (list.Count == 0)
         {
@@ -99,4 +87,11 @@ public class CopyDesignator : BaseDesignator
         var planningDesignator = MenuUtility.GetPlanningDesignator<PasteDesignator>();
         Find.DesignatorManager.Select(planningDesignator);
     }
+
+    public override void RenderHighlight(List<IntVec3> dragCells)
+    { DesignatorUtility.RenderHighlightOverSelectableCells(this, dragCells); }
+
+    public override DrawStyleCategoryDef DrawStyleCategory => DrawStyleCategoryDefOf.Plans;
+
+    public override bool DragDrawMeasurements => true;
 }
