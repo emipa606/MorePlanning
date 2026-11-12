@@ -12,7 +12,11 @@ public class PasteDesignator : BaseDesignator
     public PasteDesignator() : base(
         "MorePlanning.PlanPaste".Translate(),
         "MorePlanning.PlanPasteDesc".Translate(KeyBindingDefOf.Misc1.MainKeyLabel, KeyBindingDefOf.Misc2.MainKeyLabel))
-    { icon = Resources.IconPaste; }
+    {
+        icon = Resources.IconPaste;
+    }
+
+    public override bool DragDrawMeasurements => false;
 
     private static void handleRotationShortcuts()
     {
@@ -58,10 +62,15 @@ public class PasteDesignator : BaseDesignator
         }
     }
 
-    public override AcceptanceReport CanDesignateCell(IntVec3 c) { return true; }
+    public override AcceptanceReport CanDesignateCell(IntVec3 loc)
+    {
+        return true;
+    }
 
     public override void DesignateSingleCell(IntVec3 c)
-    { MorePlanningMod.Instance.ClipboardPlan?.DesignateFromOrigin(c, Map); }
+    {
+        MorePlanningMod.Instance.ClipboardPlan?.DesignateFromOrigin(c, Map);
+    }
 
     public override void DoExtraGuiControls(float leftX, float bottomY)
     {
@@ -120,8 +129,8 @@ public class PasteDesignator : BaseDesignator
         base.Selected();
         defaultDesc =
             "MorePlanning.PlanPasteDesc".Translate(
-            KeyBindingDefOf.Misc1.MainKeyLabel,
-            KeyBindingDefOf.Misc2.MainKeyLabel);
+                KeyBindingDefOf.Misc1.MainKeyLabel,
+                KeyBindingDefOf.Misc2.MainKeyLabel);
     }
 
     public override void SelectedUpdate()
@@ -136,6 +145,4 @@ public class PasteDesignator : BaseDesignator
         var intVec = UI.MouseCell();
         MorePlanningMod.Instance.ClipboardPlan.Draw(intVec, Map);
     }
-
-    public override bool DragDrawMeasurements => false;
 }

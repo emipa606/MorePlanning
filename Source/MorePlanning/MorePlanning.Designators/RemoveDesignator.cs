@@ -40,19 +40,22 @@ public class RemoveDesignator : PlanBaseDesignator
             iconTexCoords);
     }
 
-    public override AcceptanceReport CanDesignateCell(IntVec3 c)
+    public override AcceptanceReport CanDesignateCell(IntVec3 loc)
     {
-        if (!c.InBounds(Map))
+        if (!loc.InBounds(Map))
         {
             return false;
         }
 
         return MorePlanningMod.Instance.OverrideColors
-            ? MapUtility.HasAnyPlanDesignationAt(c, Map)
-            : MapUtility.HasPlanDesignationAt(c, Map, MorePlanningMod.Instance.SelectedColor);
+            ? MapUtility.HasAnyPlanDesignationAt(loc, Map)
+            : MapUtility.HasPlanDesignationAt(loc, Map, MorePlanningMod.Instance.SelectedColor);
     }
 
-    public override void DesignateSingleCell(IntVec3 c) { MapUtility.RemoveAllPlanDesignationAt(c, Map); }
+    public override void DesignateSingleCell(IntVec3 c)
+    {
+        MapUtility.RemoveAllPlanDesignationAt(c, Map);
+    }
 
     public override void DrawMouseAttachments()
     {

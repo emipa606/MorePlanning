@@ -20,15 +20,21 @@ public class ConvertibleColor
 
     private float _v;
 
-    public ConvertibleColor() { ColorRGB = default; }
+    public ConvertibleColor()
+    {
+        ColorRGB = default;
+    }
 
-    public ConvertibleColor(Color c) { ColorRGB = c; }
+    public ConvertibleColor(Color c)
+    {
+        ColorRGB = c;
+    }
 
     public Color HueOnly => Color.HSVToRGB(_h, 1f, 1f);
 
     public Color ColorRGB
     {
-        get { return new(_r, _g, _b, _a); }
+        get => new(_r, _g, _b, _a);
         private set
         {
             _r = value.r;
@@ -42,10 +48,10 @@ public class ConvertibleColor
 
     public string ColorHex
     {
-        get { return _hexColor; }
+        get => _hexColor;
         set
         {
-            if(!value.TryHexToColor(out var color))
+            if (!value.TryHexToColor(out var color))
             {
                 return;
             }
@@ -57,7 +63,7 @@ public class ConvertibleColor
 
     public float H
     {
-        get { return _h; }
+        get => _h;
         set
         {
             _h = value;
@@ -71,7 +77,7 @@ public class ConvertibleColor
 
     public float S
     {
-        get { return _s; }
+        get => _s;
         set
         {
             _s = value;
@@ -85,7 +91,7 @@ public class ConvertibleColor
 
     public float V
     {
-        get { return _v; }
+        get => _v;
         set
         {
             _v = value;

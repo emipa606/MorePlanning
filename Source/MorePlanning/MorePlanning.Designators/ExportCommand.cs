@@ -1,6 +1,6 @@
-using RimWorld;
 using System.Linq;
 using System.Text;
+using RimWorld;
 using UnityEngine;
 using Verse;
 using Resources = MorePlanning.Common.Resources;
@@ -10,7 +10,9 @@ namespace MorePlanning.Designators;
 public class ExportCommand : BaseCommand
 {
     public ExportCommand() : base("MorePlanning.PlanExport".Translate(), "MorePlanning.PlanExportDesc".Translate())
-    { icon = Resources.IconExport; }
+    {
+        icon = Resources.IconExport;
+    }
 
     protected override void OnClick()
     {

@@ -1,5 +1,5 @@
-using MorePlanning.Common;
 using System.Collections.Generic;
+using MorePlanning.Common;
 using Verse;
 
 namespace MorePlanning.Designators;
@@ -9,9 +9,14 @@ public class OpacityCommand : BaseCommand
     private static readonly int[] _opacityOptions = [10, 15, 20, 25, 30, 40, 50, 60, 70, 80];
 
     public OpacityCommand() : base("MorePlanning.Opacity.label".Translate(0), "MorePlanning.Opacity.desc".Translate())
-    { icon = Resources.IconOpacity; }
+    {
+        icon = Resources.IconOpacity;
+    }
 
-    private void UpdateLabel(int value) { defaultLabel = "MorePlanning.Opacity.label".Translate(value); }
+    private void UpdateLabel(int value)
+    {
+        defaultLabel = "MorePlanning.Opacity.label".Translate(value);
+    }
 
     protected override void OnClick()
     {
@@ -20,7 +25,7 @@ public class OpacityCommand : BaseCommand
         foreach (var num in opacityOptions)
         {
             var text = $"{num}%";
-            if (num == MorePlanningMod.Instance.Settings.DefaultPlanOpacity)
+            if (num == MorePlanningModSettings.DefaultPlanOpacity)
             {
                 text += " " + "MorePlanning.DefaultOpacity".Translate();
             }
@@ -41,5 +46,8 @@ public class OpacityCommand : BaseCommand
         Find.DesignatorManager.Deselect();
     }
 
-    public override void SelectedUpdate() { UpdateLabel(MorePlanningMod.Instance.Settings.DefaultPlanOpacity); }
+    public override void SelectedUpdate()
+    {
+        UpdateLabel(MorePlanningModSettings.DefaultPlanOpacity);
+    }
 }

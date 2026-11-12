@@ -1,5 +1,9 @@
 # Changelog for MorePlanning
 
+1.7.0 - Mod updated for 1.7 and passed autotests
+Used DeepL to update translations for German, ChineseSimplified, French, PortugueseBrazilian, Russian, Spanish, SpanishLatin
+
+
 1.6.4 - Fixed opacity gizmo
 
 

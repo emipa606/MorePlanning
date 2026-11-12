@@ -11,7 +11,9 @@ public class VisibilityCommand : BaseCommand
     public VisibilityCommand() : base(
         "MorePlanning.PlanVisibility".Translate(),
         "MorePlanning.PlanVisibilityDesc".Translate())
-    { hotKey = KeyBindingDefOf.Misc12; }
+    {
+        hotKey = KeyBindingDefOf.Misc12;
+    }
 
     public override void ProcessInput(Event ev)
     {
@@ -20,7 +22,13 @@ public class VisibilityCommand : BaseCommand
         Find.DesignatorManager.Deselect();
     }
 
-    public override void SelectedUpdate() { UpdateIcon(MorePlanningMod.Instance.PlanningVisibility); }
+    public override void SelectedUpdate()
+    {
+        UpdateIcon(MorePlanningMod.Instance.PlanningVisibility);
+    }
 
-    public void UpdateIcon(bool visible) { icon = visible ? Resources.IconVisible : Resources.IconInvisible; }
+    public void UpdateIcon(bool visible)
+    {
+        icon = visible ? Resources.IconVisible : Resources.IconInvisible;
+    }
 }

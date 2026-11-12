@@ -41,4 +41,4 @@ Update of Alan Dariva, Usagireis mod https://steamcommunity.com/sharedfiles/file
 
  
 
-[![Image](https://img.shields.io/github/v/release/emipa606/MorePlanning?label=latest%20version&style=plastic&color=9f1111&labelColor=black)](https://steamcommunity.com/sharedfiles/filedetails/changelog/3554743746) | tags:  planning options
+[![Image](https://img.shields.io/github/v/release/emipa606/MorePlanning?label=latest%20version&style=plastic&color=9f1111&labelColor=black)](https://steamcommunity.com/sharedfiles/filedetails/changelog/3554743746) | planning options

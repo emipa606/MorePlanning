@@ -1,7 +1,7 @@
-using MorePlanning.Utility;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using MorePlanning.Utility;
 using UnityEngine;
 using Verse;
 using Resources = MorePlanning.Common.Resources;
@@ -22,7 +22,17 @@ public class PlanInfoSet : IEnumerable<PlanInfo>
         Size = new IntVec2(num3 - num + 1, num2 - num4 + 1);
     }
 
-    IEnumerator IEnumerable.GetEnumerator() { return GetEnumerator(); }
+    public IntVec2 Size { get; private set; }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+
+    public IEnumerator<PlanInfo> GetEnumerator()
+    {
+        return PlanDesignationInfo.GetEnumerator();
+    }
 
     internal void FlipHorizontally()
     {
@@ -93,8 +103,6 @@ public class PlanInfoSet : IEnumerable<PlanInfo>
         GenDraw.DrawFieldEdges(list);
     }
 
-    public IEnumerator<PlanInfo> GetEnumerator() { return PlanDesignationInfo.GetEnumerator(); }
-
     public void Rotate(RotationDirection rotationDirection)
     {
         foreach (var item in PlanDesignationInfo)
@@ -102,6 +110,4 @@ public class PlanInfoSet : IEnumerable<PlanInfo>
             item.Pos = item.Pos.RotatedBy(rotationDirection == RotationDirection.Clockwise ? Rot4.East : Rot4.West);
         }
     }
-
-    public IntVec2 Size { get; private set; }
 }

@@ -13,45 +13,48 @@ public static class ColorExtensions
         return $"{num:x2}{num2:x2}{num3:x2}";
     }
 
-    public static Color HexToColor(this string cstr)
+    extension(string cstr)
     {
-        var black = Color.black;
-        black.r = int.Parse(cstr[..2], NumberStyles.AllowHexSpecifier) / 255f;
-        black.g = int.Parse(cstr.Substring(2, 2), NumberStyles.AllowHexSpecifier) / 255f;
-        black.b = int.Parse(cstr.Substring(4, 2), NumberStyles.AllowHexSpecifier) / 255f;
-        return black;
-    }
-
-    public static bool TryHexToColor(this string cstr, out Color color)
-    {
-        color = Color.black;
-        cstr = cstr.TrimStart(['#']);
-        if (!int.TryParse(cstr[..2], NumberStyles.AllowHexSpecifier, CultureInfo.InvariantCulture, out var result))
+        public Color HexToColor()
         {
-            return false;
+            var black = Color.black;
+            black.r = int.Parse(cstr[..2], NumberStyles.AllowHexSpecifier) / 255f;
+            black.g = int.Parse(cstr.Substring(2, 2), NumberStyles.AllowHexSpecifier) / 255f;
+            black.b = int.Parse(cstr.Substring(4, 2), NumberStyles.AllowHexSpecifier) / 255f;
+            return black;
         }
 
-        if (!int.TryParse(
-            cstr.Substring(2, 2),
-            NumberStyles.AllowHexSpecifier,
-            CultureInfo.InvariantCulture,
-            out var result2))
+        public bool TryHexToColor(out Color color)
         {
-            return false;
-        }
+            color = Color.black;
+            cstr = cstr.TrimStart('#');
+            if (!int.TryParse(cstr[..2], NumberStyles.AllowHexSpecifier, CultureInfo.InvariantCulture, out var result))
+            {
+                return false;
+            }
 
-        if (!int.TryParse(
-            cstr.Substring(4, 2),
-            NumberStyles.AllowHexSpecifier,
-            CultureInfo.InvariantCulture,
-            out var result3))
-        {
-            return false;
-        }
+            if (!int.TryParse(
+                    cstr.Substring(2, 2),
+                    NumberStyles.AllowHexSpecifier,
+                    CultureInfo.InvariantCulture,
+                    out var result2))
+            {
+                return false;
+            }
 
-        color.r = result / 255f;
-        color.g = result2 / 255f;
-        color.b = result3 / 255f;
-        return true;
+            if (!int.TryParse(
+                    cstr.Substring(4, 2),
+                    NumberStyles.AllowHexSpecifier,
+                    CultureInfo.InvariantCulture,
+                    out var result3))
+            {
+                return false;
+            }
+
+            color.r = result / 255f;
+            color.g = result2 / 255f;
+            color.b = result3 / 255f;
+            return true;
+        }
     }
 }

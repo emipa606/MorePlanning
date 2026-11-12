@@ -18,4 +18,3 @@ public class MorePlanningWorldComponent : WorldComponent
         Scribe_Values.Look(ref PlanningVisibility, "planningVisibility", true);
     }
 }
-

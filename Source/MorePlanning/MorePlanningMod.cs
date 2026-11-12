@@ -1,33 +1,33 @@
-﻿using HarmonyLib;
-using Mlie;
-using MorePlanning.Designators;
-using MorePlanning.Patches;
-using MorePlanning.Plan;
-using MorePlanning.Utility;
-using RimWorld;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
+using HarmonyLib;
+using Mlie;
+using MorePlanning.Designators;
+using MorePlanning.Patches;
+using MorePlanning.Plan;
+using MorePlanning.Utility;
 using UnityEngine;
 using Verse;
+using Resources = MorePlanning.Common.Resources;
 
 namespace MorePlanning;
 
 public class MorePlanningMod : Mod
 {
-    public const string Identifier = "com.github.alandariva.moreplanning";
+    private const string Identifier = "com.github.alandariva.moreplanning";
 
     private static MorePlanningMod _instance;
     private static string currentVersion;
 
-    // cache pointer to the world component (replaces UtilityWorldObject)
-    private MorePlanningWorldComponent _worldComponent;
+    public readonly MorePlanningModSettings Settings;
     public int SelectedColor;
 
-    public MorePlanningModSettings Settings;
+    // cache pointer to the world component (replaces UtilityWorldObject)
+    private MorePlanningWorldComponent _worldComponent;
 
     public MorePlanningMod(ModContentPack content) : base(content)
     {
@@ -41,35 +41,70 @@ public class MorePlanningMod : Mod
         importOldHugsLibSettings();
 
         // Do what DefsLoaded used to do, but wait until defs are actually available.
-        LongEventHandler.ExecuteWhenFinished(
-            () =>
+        LongEventHandler.ExecuteWhenFinished(() =>
+        {
+            try
             {
-                try
-                {
-                    InitializeDefsLoadedLikeBehavior();
-                } catch(Exception ex)
-                {
-                    Log.Error($"[{Identifier}] Exception during initialization: {ex}");
-                }
+                InitializeDefsLoadedLikeBehavior();
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"[{Identifier}] Exception during initialization: {ex}");
+            }
 
-                HarmonyPatches.PatchDubsMintMenus(harmony);
-            });
+            HarmonyPatches.PatchDubsMintMenus(harmony);
+        });
     }
+
+    public static MorePlanningMod Instance => _instance ?? throw new InvalidOperationException();
+
+    public PlanInfoSet ClipboardPlan { get; set; }
+
+
+    public bool PlanningVisibility
+    {
+        get
+        {
+            EnsureWorldComponentLoaded();
+            return _worldComponent?.PlanningVisibility ?? true;
+        }
+        set
+        {
+            EnsureWorldComponentLoaded();
+            if (_worldComponent == null)
+            {
+                return;
+            }
+
+            if (_worldComponent.PlanningVisibility == value)
+            {
+                return;
+            }
+
+            _worldComponent.PlanningVisibility = value;
+
+            // update the UI icon if present
+            MenuUtility.GetPlanningDesignator<VisibilityCommand>()?.UpdateIcon(value);
+        }
+    }
+
+    public bool OverrideColors => (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) ==
+                                  Settings.ShiftKeyForOverride;
 
     private void EnsureWorldComponentLoaded()
     {
-        if(_worldComponent != null)
+        if (_worldComponent != null)
         {
             return;
         }
 
-        if(Find.World == null)
+        if (Find.World == null)
         {
             return;
         }
 
         _worldComponent = Find.World.GetComponent<MorePlanningWorldComponent>();
-        if(_worldComponent == null)
+        if (_worldComponent == null)
         {
             // Add if missing (shouldn't normally be necessary if component listed in About.xml)
             Find.World.components.Add(new MorePlanningWorldComponent(Find.World));
@@ -85,7 +120,7 @@ public class MorePlanningMod : Mod
     private static void importOldHugsLibSettings()
     {
         var hugsLibConfig = Path.Combine(GenFilePaths.SaveDataFolderPath, "HugsLib", "ModSettings.xml");
-        if(!new FileInfo(hugsLibConfig).Exists)
+        if (!new FileInfo(hugsLibConfig).Exists)
         {
             return;
         }
@@ -94,29 +129,31 @@ public class MorePlanningMod : Mod
         var modNodeName = "com.github.alandariva.moreplanning";
 
         var modSettings = xml.Root?.Element(modNodeName);
-        if(modSettings == null)
+        if (modSettings == null)
         {
             return;
         }
 
-        foreach(var modSetting in modSettings.Elements())
+        foreach (var modSetting in modSettings.Elements())
         {
-            if(modSetting.Name == "_removeIfBuildingDespawned")
+            if (modSetting.Name == "_removeIfBuildingDespawned")
             {
                 Instance.Settings.RemoveIfBuildingDespawned = bool.Parse(modSetting.Value);
             }
-            if(modSetting.Name == "_shiftKeyForOverride")
+
+            if (modSetting.Name == "_shiftKeyForOverride")
             {
                 Instance.Settings.ShiftKeyForOverride = bool.Parse(modSetting.Value);
             }
-            if(modSetting.Name == "_planOpacity")
+
+            if (modSetting.Name == "_planOpacity")
             {
                 Instance.Settings.PlanOpacity = int.Parse(modSetting.Value);
             }
         }
 
         Instance.Settings.Write();
-        xml.Root.Element(modNodeName)?.Remove();
+        xml.Root?.Element(modNodeName)?.Remove();
         xml.Save(hugsLibConfig);
 
         Log.Message($"[{modNodeName}]: Imported old HugLib-settings");
@@ -125,15 +162,15 @@ public class MorePlanningMod : Mod
     private void InitializeDefsLoadedLikeBehavior()
     {
         // This is the rough equivalent of DefsLoaded() in HugsLib
-        MorePlanning.Common.Resources.PlanDesignationDef = DefDatabase<DesignationDef>.GetNamedSilentFail("MP_Plan");
-        if(MorePlanning.Common.Resources.PlanDesignationDef == null)
+        Resources.PlanDesignationDef = DefDatabase<DesignationDef>.GetNamedSilentFail("MP_Plan");
+        if (Resources.PlanDesignationDef == null)
         {
             Log.Warning($"[{Identifier}] DesignationDef 'MP_Plan' not found.");
         }
 
         PlanColorManager.LoadFromSettings();
 
-        // Apply any settings-derived changes to defs (removeIfBuildingDespawned etc)
+        // Apply any settings-derived changes to defs (removeIfBuildingDespawned etc.)
         UpdatePlanningDefsSetting();
 
         // Add the color select designators into the "Planning" category if missing
@@ -143,10 +180,7 @@ public class MorePlanningMod : Mod
     private void UpdatePlanningDefsSetting()
     {
         var def = DefDatabase<DesignationDef>.GetNamedSilentFail("MP_Plan");
-        if(def != null)
-        {
-            def.removeIfBuildingDespawned = Settings.RemoveIfBuildingDespawned;
-        }
+        def?.removeIfBuildingDespawned = Settings.RemoveIfBuildingDespawned;
     }
 
 
@@ -154,7 +188,7 @@ public class MorePlanningMod : Mod
     {
         // Get the Planning designation category, fail silently if missing
         var planningCategory = DefDatabase<DesignationCategoryDef>.GetNamedSilentFail("Planning");
-        if(planningCategory == null)
+        if (planningCategory == null)
         {
             Log.Error("[MorePlanning] Planning designation category not found.");
             return;
@@ -162,28 +196,28 @@ public class MorePlanningMod : Mod
 
         // Get the private list of designators via reflection
         var listField = typeof(DesignationCategoryDef)
-                .GetField("resolvedDesignators", BindingFlags.Instance | BindingFlags.NonPublic);
+            .GetField("resolvedDesignators", BindingFlags.Instance | BindingFlags.NonPublic);
 
-        if(listField == null)
+        if (listField == null)
         {
             Log.Error("[MorePlanning] Could not find 'resolvedDesignators' field via reflection.");
             return;
         }
 
-        if(!(listField.GetValue(planningCategory) is List<Designator> list))
+        if (listField.GetValue(planningCategory) is not List<Designator> list)
         {
             return;
         }
 
         // Check if the SelectColorDesignator instances already exist
-        bool anyExisting = list.OfType<SelectColorDesignator>().Any();
-        if(anyExisting)
+        var anyExisting = list.OfType<SelectColorDesignator>().Any();
+        if (anyExisting)
         {
             return; // already added, nothing to do
         }
 
         // Add 10 SelectColorDesignator instances
-        for(int i = 0; i < PlanColorManager.NumPlans; i++)
+        for (var i = 0; i < PlanColorManager.NumPlans; i++)
         {
             list.Add(new SelectColorDesignator(i));
         }
@@ -212,12 +246,12 @@ public class MorePlanningMod : Mod
 
         listing.Gap(8f);
 
-        if(listing.ButtonText("MorePlanning.Reset".Translate()))
+        if (listing.ButtonText("MorePlanning.Reset".Translate()))
         {
             Settings.ExposeData_ResetToDefaults();
         }
 
-        if(currentVersion != null)
+        if (currentVersion != null)
         {
             listing.Gap();
             GUI.contentColor = Color.gray;
@@ -234,7 +268,10 @@ public class MorePlanningMod : Mod
         Log.Error($"[{Identifier}] {text}");
     }
 
-    public static void LogMessage(string text) { Log.Message($"[{Identifier}] {text}"); }
+    public static void LogMessage(string text)
+    {
+        Log.Message($"[{Identifier}] {text}");
+    }
 
     public override string SettingsCategory()
     {
@@ -242,7 +279,7 @@ public class MorePlanningMod : Mod
         return "MorePlanning_ModName".Translate();
     }
 
-    public void SettingsChanged()
+    private void SettingsChanged()
     {
         UpdatePlanningDefsSetting();
         PlanColorManager.InvalidateColors();
@@ -254,39 +291,4 @@ public class MorePlanningMod : Mod
         base.WriteSettings();
         SettingsChanged();
     }
-
-    public static MorePlanningMod Instance => _instance ?? throw new InvalidOperationException();
-
-    public PlanInfoSet ClipboardPlan { get; set; }
-
-
-    public bool PlanningVisibility
-    {
-        get
-        {
-            EnsureWorldComponentLoaded();
-            return _worldComponent?.PlanningVisibility ?? true;
-        }
-        set
-        {
-            EnsureWorldComponentLoaded();
-            if(_worldComponent == null)
-            {
-                return;
-            }
-
-            if(_worldComponent.PlanningVisibility == value)
-            {
-                return;
-            }
-
-            _worldComponent.PlanningVisibility = value;
-
-            // update the UI icon if present
-            MenuUtility.GetPlanningDesignator<VisibilityCommand>()?.UpdateIcon(value);
-        }
-    }
-
-    public bool OverrideColors => (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) ==
-        Settings.ShiftKeyForOverride;
 }

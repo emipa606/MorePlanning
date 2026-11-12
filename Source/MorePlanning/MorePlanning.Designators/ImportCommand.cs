@@ -1,10 +1,10 @@
-using MorePlanning.Plan;
-using MorePlanning.Utility;
-using RimWorld;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using MorePlanning.Plan;
+using MorePlanning.Utility;
+using RimWorld;
 using UnityEngine;
 using Verse;
 using Resources = MorePlanning.Common.Resources;
@@ -14,7 +14,9 @@ namespace MorePlanning.Designators;
 public class ImportCommand : BaseCommand
 {
     public ImportCommand() : base("MorePlanning.PlanImport".Translate(), "MorePlanning.PlanImportDesc".Translate())
-    { icon = Resources.IconImport; }
+    {
+        icon = Resources.IconImport;
+    }
 
     protected override void OnClick()
     {
@@ -29,7 +31,7 @@ public class ImportCommand : BaseCommand
 
             var array = systemCopyBuffer.ToLowerInvariant().Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
             Array.Reverse(array);
-            var regex = new Regex("^[-a-z]+$");
+            var regex = new Regex("^[-a-z]+$", RegexOptions.None, TimeSpan.FromSeconds(1));
             if (!array.All(regex.IsMatch))
             {
                 Messages.Message("MorePlanning.PlanImportError".Translate(), MessageTypeDefOf.RejectInput);

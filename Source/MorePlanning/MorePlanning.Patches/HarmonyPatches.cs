@@ -1,52 +1,56 @@
-using HarmonyLib;
-using MorePlanning.Common;
-using RimWorld;
-using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
+using HarmonyLib;
+using MorePlanning.Common;
+using RimWorld;
 using Verse;
 
 namespace MorePlanning.Patches;
 
 internal static class HarmonyPatches
 {
-    public static void CacheDesPanels_Postfix() { MorePlanningMod.AddDesignators(); }
+    public static void CacheDesPanels_Postfix()
+    {
+        MorePlanningMod.AddDesignators();
+    }
 
 
     public static IEnumerable<CodeInstruction> CacheDesPanelsDubs_Transpiler(IEnumerable<CodeInstruction> instrs)
     {
-        List<CodeInstruction> codes = new List<CodeInstruction>(instrs);
+        var codes = new List<CodeInstruction>(instrs);
 
         // Dynamically find the field desPanelsCached
-        Type mintType = AccessTools.TypeByName("DubsMintMenus.MainTabWindow_MintArchitect");
-        if(mintType == null)
+        var mintType = AccessTools.TypeByName("DubsMintMenus.MainTabWindow_MintArchitect");
+        if (mintType == null)
         {
             return codes;
         }
 
-        FieldInfo desPanelsField = AccessTools.Field(mintType, "desPanelsCached");
-        if(desPanelsField == null)
+        var desPanelsField = AccessTools.Field(mintType, "desPanelsCached");
+        if (desPanelsField == null)
         {
             return codes;
         }
 
-        MethodInfo addDesignators = AccessTools.DeclaredMethod(
+        var addDesignators = AccessTools.DeclaredMethod(
             typeof(MorePlanningMod),
             nameof(MorePlanningMod.AddDesignators));
-        if(addDesignators == null)
+        if (addDesignators == null)
         {
             return codes;
         }
 
         // Inject call after the last stfld to desPanelsCached
-        for(int i = codes.Count - 1; i >= 0; i--)
+        for (var i = codes.Count - 1; i >= 0; i--)
         {
-            if(codes[i].opcode == OpCodes.Stfld && codes[i].operand is FieldInfo fi && fi == desPanelsField)
+            if (codes[i].opcode != OpCodes.Stfld || codes[i].operand is not FieldInfo fi || fi != desPanelsField)
             {
-                codes.Insert(i + 1, new CodeInstruction(OpCodes.Call, addDesignators));
-                break;
+                continue;
             }
+
+            codes.Insert(i + 1, new CodeInstruction(OpCodes.Call, addDesignators));
+            break;
         }
 
         return codes;
@@ -57,7 +61,7 @@ internal static class HarmonyPatches
 
     public static bool DesignationPlanningExposeData_Prefix(Designation __instance)
     {
-        if(__instance is PlanDesignation planDesignation)
+        if (__instance is PlanDesignation planDesignation)
         {
             Scribe_Values.Look(ref planDesignation.Color, "Color", 0, true);
         }
@@ -67,7 +71,7 @@ internal static class HarmonyPatches
 
     public static void DoPlaySettingsGlobalControls_Postfix(WidgetRow row, bool worldView)
     {
-        if(worldView)
+        if (worldView)
         {
             return;
         }
@@ -82,24 +86,23 @@ internal static class HarmonyPatches
 
     public static void PatchDubsMintMenus(Harmony harmony)
     {
-        Type mintType = AccessTools.TypeByName("DubsMintMenus.MainTabWindow_MintArchitect");
-        if(mintType == null)
+        var mintType = AccessTools.TypeByName("DubsMintMenus.MainTabWindow_MintArchitect");
+        if (mintType == null)
         {
             return;
         }
 
-        //Log.Message("[MorePlanning] Dubs Mint Menus detected, patching.");
         // Only now we are on the main thread, safe to patch
-        FieldInfo desPanelsField = AccessTools.Field(mintType, "desPanelsCached");
-        if(desPanelsField == null)
+        var desPanelsField = AccessTools.Field(mintType, "desPanelsCached");
+        if (desPanelsField == null)
         {
             return;
         }
 
-        MethodInfo transpiler = AccessTools.Method(typeof(HarmonyPatches), nameof(CacheDesPanelsDubs_Transpiler));
+        var transpiler = AccessTools.Method(typeof(HarmonyPatches), nameof(CacheDesPanelsDubs_Transpiler));
 
         var property = mintType.GetProperty("CacheDesPanels", BindingFlags.Instance | BindingFlags.NonPublic);
-        if(property?.GetGetMethod(true) != null)
+        if (property?.GetGetMethod(true) != null)
         {
             harmony.Patch(property.GetGetMethod(true), transpiler: new HarmonyMethod(transpiler));
         }
@@ -111,9 +114,9 @@ internal static class HarmonyPatches
         var method2 = typeof(HarmonyPatches).GetMethod(nameof(DesignationPlanningExposeData_Prefix));
         harmony.Patch(method, new HarmonyMethod(method2));
         var method3 =
-                typeof(MainTabWindow_Architect).GetMethod(
-            "CacheDesPanels",
-            BindingFlags.Instance | BindingFlags.NonPublic);
+            typeof(MainTabWindow_Architect).GetMethod(
+                "CacheDesPanels",
+                BindingFlags.Instance | BindingFlags.NonPublic);
         var method4 = typeof(HarmonyPatches).GetMethod(nameof(CacheDesPanels_Postfix));
         harmony.Patch(method3, null, new HarmonyMethod(method4));
         var method5 = typeof(PlaySettings).GetMethod(

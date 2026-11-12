@@ -12,11 +12,14 @@ public class PlanDesignation : Designation
     {
     }
 
-    public PlanDesignation(LocalTargetInfo target, DesignationDef def, int color) : base(target, def) { Color = color; }
+    public PlanDesignation(LocalTargetInfo target, DesignationDef def, int color) : base(target, def)
+    {
+        Color = color;
+    }
 
     public override void DesignationDraw()
     {
-        if(!MorePlanningMod.Instance.PlanningVisibility)
+        if (!MorePlanningMod.Instance.PlanningVisibility)
         {
             return;
         }

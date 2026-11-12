@@ -1,7 +1,7 @@
+using System.Collections.Generic;
 using MorePlanning.Dialogs;
 using MorePlanning.Plan;
 using MorePlanning.Utility;
-using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 using Resources = MorePlanning.Common.Resources;
@@ -10,6 +10,8 @@ namespace MorePlanning.Designators;
 
 public class SelectColorDesignator(int color) : BaseDesignator(color.ToString(), "MorePlanning.PlanDesc".Translate())
 {
+    public override string LabelCap { get; } = string.Empty;
+
     protected override void DrawToolbarIcon(Rect rect)
     {
         var rect2 = rect;
@@ -35,24 +37,22 @@ public class SelectColorDesignator(int color) : BaseDesignator(color.ToString(),
             iconTexCoords);
     }
 
-    public override AcceptanceReport CanDesignateCell(IntVec3 loc) { return AcceptanceReport.WasRejected; }
+    public override AcceptanceReport CanDesignateCell(IntVec3 loc)
+    {
+        return AcceptanceReport.WasRejected;
+    }
 
     public override void ProcessInput(Event ev)
     {
         var options = new List<FloatMenuOption>
         {
             new(
-            "MorePlanning.ChangeColor".Translate(),
-            delegate
-            {
-                Find.WindowStack.Add(new ColorSelectorDialog(color));
-            })
+                "MorePlanning.ChangeColor".Translate(),
+                delegate { Find.WindowStack.Add(new ColorSelectorDialog(color)); })
         };
         Find.WindowStack.Add(new FloatMenu(options));
         MorePlanningMod.Instance.SelectedColor = color;
         var planningDesignator = MenuUtility.GetPlanningDesignator<AddDesignator>();
         Find.DesignatorManager.Select(planningDesignator);
     }
-
-    public override string LabelCap { get; } = string.Empty;
 }

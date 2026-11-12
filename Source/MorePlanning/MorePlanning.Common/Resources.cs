@@ -63,7 +63,7 @@ internal static class Resources
         IconCut = ContentFinder<Texture2D>.Get("UI/PlanCut");
         IconPaste = ContentFinder<Texture2D>.Get("UI/PlanPaste");
         PlanMatColor = new Material[10];
-        for(var i = 0; i < PlanMatColor.Length; i++)
+        for (var i = 0; i < PlanMatColor.Length; i++)
         {
             PlanMatColor[i] = MaterialPool.MatFrom($"UI/PlanBase{i}", ShaderDatabase.MetaOverlay, Color.white);
         }

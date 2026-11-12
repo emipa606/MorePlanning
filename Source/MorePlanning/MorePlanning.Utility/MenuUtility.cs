@@ -4,7 +4,7 @@ using Verse;
 
 namespace MorePlanning.Utility;
 
-internal class MenuUtility
+internal static class MenuUtility
 {
     private static FieldInfo _resolvedDesignatorsInfo;
 
@@ -29,8 +29,8 @@ internal class MenuUtility
     {
         _resolvedDesignatorsInfo =
             typeof(DesignationCategoryDef).GetField(
-            "resolvedDesignators",
-            BindingFlags.Instance | BindingFlags.NonPublic);
+                "resolvedDesignators",
+                BindingFlags.Instance | BindingFlags.NonPublic);
         if (_resolvedDesignatorsInfo == null)
         {
             MorePlanningMod.LogError(

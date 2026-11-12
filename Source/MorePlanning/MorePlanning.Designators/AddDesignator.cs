@@ -20,19 +20,19 @@ public class AddDesignator : PlanBaseDesignator
         Graphics.DrawTexture(new Rect(rect), Resources.Plan, iconTexCoords, 0, 1, 0, 1, PlanColorManager.GetColor());
     }
 
-    public override AcceptanceReport CanDesignateCell(IntVec3 c)
+    public override AcceptanceReport CanDesignateCell(IntVec3 loc)
     {
-        if (!c.InBounds(Map))
+        if (!loc.InBounds(Map))
         {
             return false;
         }
 
-        if (c.InNoBuildEdgeArea(Map))
+        if (loc.InNoBuildEdgeArea(Map))
         {
             return "TooCloseToMapEdge".Translate();
         }
 
-        return MorePlanningMod.Instance.OverrideColors || !MapUtility.HasAnyPlanDesignationAt(c, Map);
+        return MorePlanningMod.Instance.OverrideColors || !MapUtility.HasAnyPlanDesignationAt(loc, Map);
     }
 
     public override void DesignateSingleCell(IntVec3 c)

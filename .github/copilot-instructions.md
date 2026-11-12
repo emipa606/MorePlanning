@@ -1,60 +1,112 @@
-# GitHub Copilot Instructions for "More Planning (Continued)" Mod
+# GitHub Copilot Instructions for More Planning (Continued) Mod
 
 ## Mod Overview and Purpose
 
-**Mod Name**: More Planning (Continued)
+**Mod Name:** More Planning (Continued)  
+**Mod Description:** An update to Alan Dariva and Usagirei's mod that adds new planning options to the Architect menu in RimWorld.
 
-**Description**: This mod is a continuation of the "More Planning" mod, originally created by Alan Dariva and Usagirei, and updated for RimWorld versions 1.3 to 1.5. The mod enhances the planning functionality in the game by introducing more customizable options and improving the user experience in the planning phase of base-building.
-
-The mod leverages the HugsLib library and Harmony for modding capabilities.
+**Purpose:**  
+This mod enhances the planning features in RimWorld by providing additional customization options, such as 10 customizable planning designations, the ability to show/hide planning designations, control planning opacity, and more.
 
 ## Key Features and Systems
 
-- **Customizable Planning Designations**: The mod provides 10 customizable planning designations to allow for more detailed and personalized planning.
-  
-- **Visibility Control**: Users can show or hide planning designations as needed.
+### Features
+- **10 Customizable Planning Designations:** Users can create and customize up to 10 different planning designations.
+- **Show/Hide Planning Designations:** Users can toggle the visibility of planning designations to better manage their layout.
+- **Control Planning Opacity:** Adjust the transparency of planning designations for better visibility on the map.
+- **Cut/Copy/Paste Planning Designations:** Allows users to manipulate planning designations using standard cut, copy, and paste functionalities.
+- **Remove Designations on Build/Deconstruct:** Users can choose whether planning designations should be removed when something is built or deconstructed on top of them.
+- **Shift Key Override:** Holding the shift key allows users to override other planning designations.
 
-- **Opacity Control**: The plugin allows users to adjust the opacity of planning elements, aiding in better visibility under different circumstances.
-
-- **Copy, Cut, and Paste Functions**: Similar to standard editing tools, users can cut, copy, and paste planning designations, making adjustments more efficient.
-
-- **Auto-Remove Feature**: The mod offers an option to automatically remove planning designations when constructions are built or deconstructed on top of them.
-
-- **Override with Shift**: By holding the Shift key, users can override other planning designations, streamlining the planning process.
+### Systems
+- **Designation System:** Handles the creation, management, and visualization of planning designations.
+- **Harmony Patching:** Utilizes Harmony for patching existing RimWorld code to integrate new features seamlessly.
+- **XML Integration:** Uses XML definitions to define planning designations and other mod configurations.
 
 ## Coding Patterns and Conventions
 
-- **Class and Method Organization**: The mod codebase uses a structured approach where classes are named according to their functionality, often following the Designator pattern (e.g., `CutDesignator`, `PasteDesignator`). This helps in maintaining a clean and understandable structure.
+### C# Code Conventions
+- **Naming Conventions:** Use PascalCase for class names, methods, and properties. Use camelCase for local variables.
+- **Comments:** Write clear and concise comments to explain complex logic or non-obvious code sections.
+- **Error Handling:** Implement robust error handling to manage unexpected scenarios gracefully.
+- **Code Organization:** Organize code into logical namespaces and folders. Separate concerns into different classes and methods.
 
-- **Internal and Public Access Modifiers**: Classes are defined as `internal` where they are meant to be accessible within the assembly only, and as `public` when they need to be used across different parts of the application or potentially by other mods.
-
-- **Utility Classes**: `UtilityWorldObject` and other utility classes/methods are used to keep common functionalities organized and reusable.
+### XML Code Conventions
+- **Structure:** Follow a consistent structure for XML files, ensuring all elements are properly nested and formatted.
+- **Attributes:** Use attributes to provide additional metadata or configuration options for elements.
+- **Comments:** Use XML comments to describe the purpose and functionality of different elements.
 
 ## XML Integration
 
-- **Defining Designations**: Designations are defined using XML, integrating seamlessly with RimWorld's existing XML-based modding architecture. This setup allows for easy customization and extension if further designations or features need to be added.
+**DesignationCategoryDef and DesignationDef:**
+- **DesignationCategoryDef:** Defines a category for planning designations. Example:
+  xml
+  <DesignationCategoryDef>
+    <label>Planning</label>
+    <defName>Planning</defName>
+  </DesignationCategoryDef>
+  
 
-- **ModSettings**: XML is also used for mod settings, allowing for persistent user configuration across sessions.
+- **DesignationDef:** Defines individual planning designations. Example:
+  xml
+  <DesignationDef>
+    <defName>PlanningDesignation1</defName>
+    <categoryDef>Planning</categoryDef>
+    <label>Planning Designation 1</label>
+    <description>Customizable planning designation.</description>
+  </DesignationDef>
+  
 
 ## Harmony Patching
 
-- **HarmonyPatches.cs**: This file contains static classes and methods that are used to apply Harmony patches to RimWorld. These patches are essential for hooking into the game's original methods, enabling the mod to extend or alter the default game behavior without directly modifying the game's assembly.
+**Harmony Patch Example:**
+- **UpdateLegacy.cs:**
+  csharp
+  using HarmonyLib;
+  using RimWorld;
+  using Verse;
 
-- **Method Overrides**: Specific game methods are overridden or extended using Harmony to implement enhanced features, such as controlling the visibility of planning designations or altering game UI elements.
+  [HarmonyPatch(typeof(UpdateLegacy), "Update")]
+  public static class Patch_UpdateLegacy_Update
+  {
+      public static bool Prefix()
+      {
+          // Custom logic before the original method
+          Log.Message("Running custom logic in UpdateLegacy.Update");
+          return true; // Continue with original method
+      }
+  }
+  
 
 ## Suggestions for Copilot
 
-1. **Patterns Recognition**: Suggest designator classes consistently by recognizing the common pattern of class extensions and method signatures (e.g., extending `BaseDesignator`).
+### C# Suggestions
+- **Code Completion:** Request Copilot to generate complete methods or classes based on partial code snippets.
+- **Error Handling:** Ask Copilot to add error handling to existing code to ensure robustness.
+- **Optimization:** Request Copilot to optimize existing code for better performance or readability.
 
-2. **Error Handling**: Encourage implementing try-catch blocks in methods that interact with the game's core functions or other mods, as this is crucial for managing potential mod conflicts gracefully.
+### XML Suggestions
+- **Definition Generation:** Ask Copilot to generate XML definitions for new planning designations.
+- **Structure Validation:** Request Copilot to validate XML structures and ensure proper nesting and formatting.
 
-3. **Feedback Mechanism**: Utilize in-game logging (with HugsLib's logging capabilities) to provide feedback when actions are taken or when errors occur, enhancing user experience and debugging.
+### Harmony Patching Suggestions
+- **Patch Generation:** Request Copilot to generate Harmony patches for existing RimWorld methods.
+- **Patch Validation:** Ask Copilot to validate Harmony patches to ensure they integrate correctly with the existing codebase.
 
-4. **Enhance XML Definitions**: Propose syntax for defining new XML elements that conform to RimWorld's modding structure, making future extensions easier to implement.
+By following these guidelines and utilizing GitHub Copilot's suggestions, you can enhance your development process and ensure that your mod remains up-to-date and well-maintained.
 
-5. **Improve User Interactions**: Suggest UI enhancements or shortcuts that could improve player interactions with the planning tools, such as context menus or additional keybinds.
+## Project Solution Guidelines
+- Relevant mod XML files are included as Solution Items under the solution folder named XML, these can be read and modified from within the solution.
+- Use these in-solution XML files as the primary files for reference and modification.
+- The `.github/copilot-instructions.md` file is included in the solution under the `.github` solution folder, so it should be read/modified from within the solution instead of using paths outside the solution. Update this file once only, as it and the parent-path solution reference point to the same file in this workspace.
+- When making functional changes in this mod, ensure the documented features stay in sync with implementation; use the in-solution `.github` copy as the primary file.
+- In the solution is also a project called Assembly-CSharp, containing a read-only version of the decompiled game source, for reference and debugging purposes.
+- For any new documentation, update this copilot-instructions.md file rather than creating separate documentation files.
 
-By following these structures and suggestions, developers and contributors can maintain and extend "More Planning (Continued)" with ease, ensuring a robust and user-friendly experience.
 
+## Hard rules (must follow)
+- Do NOT run commands that modify the repo (no git commit, git apply, dotnet format) unless explicitly asked.
+- Prefer minimal reads: read only the smallest code region needed (around the suspicious lines).
+- When mentioning SonarQube issues, automatically use the SonarQube MCP service to fetch and address issues instead of making inferred fixes without querying SonarQube first.
+- When mentioning the rimworld log, automatically use the Rimworld MCP service to fetch the log.
 
-This file provides comprehensive instructions for leveraging GitHub Copilot effectively in the development and maintenance of the "More Planning (Continued)" mod for RimWorld.

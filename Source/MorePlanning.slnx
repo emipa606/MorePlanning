@@ -6,4 +6,19 @@
     <BuildType Name="Release" />
   </Configurations>
   <Project Path="MorePlanning/MorePlanning.csproj" />
+  <Folder Name="/XML/1.7/Defs/Designations/">
+    <File Path="../1.7/Defs/Designations/DesignationCategories.xml" />
+  </Folder>
+  <Folder Name="/XML/1.7/Defs/PlanningDesignationDef/">
+    <File Path="../1.7/Defs/PlanningDesignationDef/Designators.xml" />
+  </Folder>
+  <Folder Name="/XML/1.7/Defs/">
+    <File Path="../1.7/Defs/UpdateInfo.xml" />
+  </Folder>
+  <Folder Name="/XML/About/">
+    <File Path="../About/about.xml" />
+  </Folder>
+  <Folder Name="/XML/Languages/English/Keyed/">
+    <File Path="../Languages/English/Keyed/Translations.xml" />
+  </Folder>
 </Solution>

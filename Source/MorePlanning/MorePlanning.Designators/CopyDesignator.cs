@@ -13,30 +13,36 @@ public class CopyDesignator : BaseDesignator
 {
     // ReSharper disable once MemberCanBeProtected.Global
     public CopyDesignator() : base("MorePlanning.PlanCopy".Translate(), "MorePlanning.PlanCopyDesc".Translate())
-    { icon = Resources.IconCopy; }
-
-    public override AcceptanceReport CanDesignateCell(IntVec3 c)
     {
-        if (!c.InBounds(Map))
+        icon = Resources.IconCopy;
+    }
+
+    public override DrawStyleCategoryDef DrawStyleCategory => DrawStyleCategoryDefOf.Plans;
+
+    public override bool DragDrawMeasurements => true;
+
+    public override AcceptanceReport CanDesignateCell(IntVec3 loc)
+    {
+        if (!loc.InBounds(Map))
         {
             return false;
         }
 
-        if (c.InNoBuildEdgeArea(Map))
+        if (loc.InNoBuildEdgeArea(Map))
         {
             return "TooCloseToMapEdge".Translate();
         }
 
-        return MapUtility.HasAnyPlanDesignationAt(c, Map);
+        return MapUtility.HasAnyPlanDesignationAt(loc, Map);
     }
 
     public override void DesignateMultiCell(IEnumerable<IntVec3> cells)
     {
         var list = (from cell in cells
-                    select MapUtility.GetPlanDesignationAt(cell, Map)
+            select MapUtility.GetPlanDesignationAt(cell, Map)
             into designation
-                    where designation != null
-                    select designation).ToList();
+            where designation != null
+            select designation).ToList();
         cells = list.Select(plan => plan.target.Cell);
         if (list.Count == 0)
         {
@@ -89,9 +95,7 @@ public class CopyDesignator : BaseDesignator
     }
 
     public override void RenderHighlight(List<IntVec3> dragCells)
-    { DesignatorUtility.RenderHighlightOverSelectableCells(this, dragCells); }
-
-    public override DrawStyleCategoryDef DrawStyleCategory => DrawStyleCategoryDefOf.Plans;
-
-    public override bool DragDrawMeasurements => true;
+    {
+        DesignatorUtility.RenderHighlightOverSelectableCells(this, dragCells);
+    }
 }
